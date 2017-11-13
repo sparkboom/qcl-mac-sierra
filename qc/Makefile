@@ -1,13 +1,13 @@
 # Makefile for libqc
 #
 # This file is part of the Quantum Computation Library (QCLIB).
-# 
+#
 # (c) Copyright by Bernhard Oemer <oemer@tph.tuwien.ac.at>, 1998-2014
-# 
-# This program comes without any warranty; without even the implied 
+#
+# This program comes without any warranty; without even the implied
 # warranty of merchantability or fitness for any particular purpose.
-# 
-#      This program is free software under the terms of the 
+#
+#      This program is free software under the terms of the
 #      GNU General Public Licence (GPL) version 2 or higher
 
 # Comment out if you want to compile for a different target architecture
@@ -20,11 +20,12 @@ DEBUG = -g -O2 -DQC_DEBUG
 #DEBUG = -g -pg -DQC_DEBUG
 #DEBUG = -O2
 
-# Comment out if you if you want to use SysV Xrand48() linear congruential 
+# Comment out if you if you want to use SysV Xrand48() linear congruential
 # PRG instead of the default random() non-linear additive  feedback PRG.
 
 #PRGOPT = -DQC_USE_RAND48
 
+CXX = /usr/local/Cellar/gcc/7.2.0/bin/g++-7
 CXXFLAGS = $(ARCHOPT) -c -pedantic -Wall $(DEBUG) $(PRGOPT)
 
 LDFLAGS = $(ARCHOPT) -L. -lm -lqc
@@ -50,10 +51,10 @@ qustates.o: qustates.cc qustates.h terms.h bitvec.h
 operator.o: operator.cc operator.h qustates.h terms.h bitvec.h
 	$(CXX) operator.cc -o operator.o $(CXXFLAGS)
 
-shor.o: shor.cc qustates.h terms.h bitvec.h 
+shor.o: shor.cc qustates.h terms.h bitvec.h
 	$(CXX) shor.cc -o shor.o $(CXXFLAGS)
 
-shor: shor.o libqc.a 
+shor: shor.o libqc.a
 	$(CXX)  shor.o -o shor $(LNKOPT)
 
 # Other Functions
@@ -62,7 +63,7 @@ edit:
 	nedit $(SOURCE) &
 
 clean:
-	rm -f *.o 
+	rm -f *.o
 
 clear: clean
 	rm -f libqc.a shor

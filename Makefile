@@ -1,13 +1,13 @@
 # Makefile for QCL
 #
 # This file is part of the Quantum Computation Language QCL.
-# 
+#
 # (c) Copyright by Bernhard Oemer <oemer@tph.tuwien.ac.at> 1998-2006
-# 
-# This program comes without any warranty; without even the implied 
+#
+# This program comes without any warranty; without even the implied
 # warranty of merchantability or fitness for any particular purpose.
-# 
-#      This program is free software under the terms of the 
+#
+#      This program is free software under the terms of the
 #      GNU General Public Licence (GPL) version 2 or higher
 
 VERSION=0.6.4
@@ -35,21 +35,21 @@ ARCH = `g++ -dumpmachine || echo bin`
 DEBUG = -O2 -g -DQCL_DEBUG -DQC_DEBUG
 #DEBUG = -O2
 
-# Plotting support 
+# Plotting support
 #
 # Comment out if you don't have GNU libplotter and X
 
-PLOPT = -DQCL_PLOT
-PLLIB = -L/usr/X11/lib -lplotter
+#PLOPT = -DQCL_PLOT
+#PLLIB = -L/usr/X11/lib -lplotter
 
 # Readline support
 #
 # Comment out if you don't have GNU readline on your system
 # explicit linking against libtermcap or libncurses may be required
 
-RLOPT = -DQCL_USE_READLINE
+#RLOPT = -DQCL_USE_READLINE
 #RLLIB = -lreadline
-RLLIB = -lreadline -lncurses
+#RLLIB = -lreadline -lncurses
 
 # Interrupt support
 #
@@ -60,7 +60,7 @@ IRQOPT = -DQCL_IRQ
 # Replace with lex and yacc on non-GNU systems (untested)
 
 LEX = flex
-YACC = bison 
+YACC = bison
 INSTALL = install
 
 # Character encoding
@@ -81,8 +81,12 @@ QCLINC = lib
 
 #CXX = g++
 #CPP = $(CC) -E
+#CXXFLAGS = -c $(ARCHOPT) $(DEBUG) $(PLOPT) $(RLOPT) $(IRQOPT) $(ENCOPT) -I$(QCDIR) -DDEF_INCLUDE_PATH="\"$(QCLDIR)\""
+#LDFLAGS = $(ARCHOPT) -L$(QCDIR) $(DEBUG) $(PLLIB) -lm -lfl -lqc $(RLLIB)
+CXX = /usr/local/Cellar/gcc/7.2.0/bin/g++-7
+CPP = $(CC) -E
 CXXFLAGS = -c $(ARCHOPT) $(DEBUG) $(PLOPT) $(RLOPT) $(IRQOPT) $(ENCOPT) -I$(QCDIR) -DDEF_INCLUDE_PATH="\"$(QCLDIR)\""
-LDFLAGS = $(ARCHOPT) -L$(QCDIR) $(DEBUG) $(PLLIB) -lm -lfl -lqc $(RLLIB) 
+LDFLAGS = $(ARCHOPT) -L$(QCDIR) $(DEBUG) $(PLLIB) -lm -ll -lqc $(RLLIB) -lc++
 
 FILESCC = $(wildcard *.cc)
 FILESH = $(wildcard *.h)
@@ -151,7 +155,7 @@ edit:
 	nedit $(SOURCE) &
 
 clean:
-	rm -f *.o lex.* yacc.* 
+	rm -f *.o lex.* yacc.*
 	cd $(QCDIR) && $(MAKE) clean
 
 clear: clean
@@ -160,7 +164,7 @@ clear: clean
 
 dist-src: dep
 	mkdir qcl-$(VERSION)
-	cp README CHANGES COPYING .depend $(SOURCE) qcl-$(VERSION) 
+	cp README CHANGES COPYING .depend $(SOURCE) qcl-$(VERSION)
 	mkdir qcl-$(VERSION)/qc
 	cp qc/Makefile qc/*.h qc/*.cc qcl-$(VERSION)/qc
 	cp -r lib qcl-$(VERSION)
@@ -169,7 +173,7 @@ dist-src: dep
 
 dist-bin: build
 	mkdir qcl-$(VERSION)-$(ARCH)
-	cp Makefile README CHANGES COPYING qcl qcl-$(VERSION)-$(ARCH) 
+	cp Makefile README CHANGES COPYING qcl qcl-$(VERSION)-$(ARCH)
 	cp -r lib qcl-$(VERSION)-$(ARCH)
 	tar czf qcl-$(VERSION)-$(ARCH).tgz --owner=0 --group=0 qcl-$(VERSION)-$(ARCH)
 	rm -r qcl-$(VERSION)-$(ARCH)
